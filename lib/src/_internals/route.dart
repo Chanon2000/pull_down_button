@@ -69,6 +69,9 @@ class PullDownMenuRoute<VoidCallback> extends PopupRoute<VoidCallback> {
   final ScrollController? scrollController;
 
   @override
+  bool get canRequestFocus => false;
+
+  @override
   final String barrierLabel;
 
   @override
