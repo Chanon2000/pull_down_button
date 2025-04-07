@@ -535,6 +535,51 @@ Future<void> showPullDownMenu({
   }
 }
 
+void showPullDownOverlay({
+  required BuildContext context,
+  required Rect buttonRect,
+  required List<PullDownMenuEntry> items,
+}) {
+  final overlay = Overlay.of(context);
+  final entry = OverlayEntry(
+    builder: (context) {
+      return Stack(
+        children: [
+          // ✅ barrier dismiss
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => entry.remove(), // ปิด overlay
+              behavior: HitTestBehavior.translucent,
+            ),
+          ),
+          // ✅ เมนูเอง
+          Positioned(
+            left: buttonRect.left,
+            top: buttonRect.top - items.length * 44, // ยกขึ้นด้านบนพอประมาณ
+            child: Material(
+              elevation: 8,
+              borderRadius: BorderRadius.circular(12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: items
+                    .map((e) => ListTile(
+                          title: Text(e.title),
+                          onTap: () {
+                            entry.remove();
+                            e.onTap?.call();
+                          },
+                        ))
+                    .toList(),
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+  overlay.insert(entry);
+}
+
 /// Is used internally by [PullDownButton] and [showPullDownMenu] to show
 /// the pull-down menu.
 Future<VoidCallback?> _showMenu<VoidCallback>({
