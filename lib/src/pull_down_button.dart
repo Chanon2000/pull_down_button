@@ -535,7 +535,7 @@ Future<void> showPullDownMenu({
   }
 }
 
-void showPullDownOverlay({
+Future<void> showPullDownOverlay({
   required BuildContext context,
   required Rect buttonRect,
   required List<PullDownMenuEntry> items,
